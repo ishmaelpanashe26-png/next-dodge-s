@@ -1,38 +1,43 @@
-import { NextResponse } from 'next/server'
+'use client'
+import { useState, useEffect } from 'react'
 
-// Fake database for now. Later we connect real DB
-const watches = [
-  {
-    id: 1, 
-    name: 'Dodge S1 Chronograph', 
-    price: 1299, 
-    image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=500', 
-    desc: 'Swiss movement. Sapphire crystal. Water resistant 10ATM.'
-  },
-  {
-    id: 2, 
-    name: 'Dodge S2 Automatic', 
-    price: 2499, 
-    image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500', 
-    desc: 'Automatic winding. 5 year warranty. Italian leather strap.'
-  },
-  {
-    id: 3, 
-    name: 'Dodge S3 Tourbillon', 
-    price: 8999, 
-    image: 'https://images.unsplash.com/photo-1617042375876-a13e36732a04?w=500', 
-    desc: 'Handcrafted. Limited edition of 50. 18k gold case.'
-  },
-]
+export default function Dashboard() {
+  const [products, setProducts] = useState<any[]>([])
 
-// GET = Fetch all products
-export async function GET() {
-  return NextResponse.json(watches)
-}
+  useEffect(() => {
+    fetch('/api/products').then(r => r.json()).then(setProducts)
+  }, [])
 
-// POST = Add new product. For your admin dashboard later
-export async function POST(request: Request) {
-  const newWatch = await request.json()
-  watches.push({ id: watches.length + 1, ...newWatch })
-  return NextResponse.json({ success: true, product: newWatch })
+  // ADD THIS FUNCTION
+  async function deleteWatch(id: number) {
+    await fetch('/api/products', {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ id })
+    })
+    // Remove from UI instantly
+    setProducts(products.filter(p => p.id !== id))
+  }
+
+  return (
+    <main style={{padding: '40px'}}>
+      <h1>Manage Watches</h1>
+      <div style={{display: 'grid', gap: '20px', marginTop: '30px'}}>
+        {products.map((p: any) => (
+          <div key={p.id} style={{background: '#121212', padding: '20px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between'}}>
+            <div>
+              <h3>{p.name}</h3>
+              <p style={{color: 'var(--gold)'}}>${p.price}</p>
+            </div>
+            <button 
+              onClick={() => deleteWatch(p.id)} // WIRE IT UP
+              style={{background: 'red', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
+    </main>
+  )
 }
