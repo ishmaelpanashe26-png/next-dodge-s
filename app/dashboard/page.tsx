@@ -1,32 +1,40 @@
-async function getProducts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/products`, { cache: 'no-store' })
-  return res.json()
-}
+'use client'
+import { useState, useEffect } from 'react'
 
-export default async function Dashboard() {
-  const products = await getProducts()
-  
+export default function Dashboard() {
+  const [products, setProducts] = useState<any[]>([])
+
+  useEffect(() => {
+    fetch('/api/products').then(r => r.json()).then(setProducts)
+  }, [])
+
+  // ADD THIS FUNCTION
+  async function deleteWatch(id: number) {
+    await fetch('/api/products', {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ id })
+    })
+    // Remove from UI instantly
+    setProducts(products.filter(p => p.id !== id))
+  }
+
   return (
     <main style={{padding: '40px'}}>
-      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
-        <h1>Manage Watches</h1>
-        <button style={{background: 'var(--gold)', color: '#000', padding: '12px 24px', border: 'none', borderRadius: '4px'}}>Add New Watch</button>
-      </div>
-
-      <div style={{display: 'grid', gap: '20px'}}>
+      <h1>Manage Watches</h1>
+      <div style={{display: 'grid', gap: '20px', marginTop: '30px'}}>
         {products.map((p: any) => (
-          <div key={p.id} style={{background: '#121212', padding: '20px', borderRadius: '8px', border: '1px solid #222', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
-              <img src={p.image} alt={p.name} style={{width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px'}}/>
-              <div>
-                <h3>{p.name}</h3>
-                <p style={{color: 'var(--gold)'}}>${p.price}</p>
-              </div>
+          <div key={p.id} style={{background: '#121212', padding: '20px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between'}}>
+            <div>
+              <h3>{p.name}</h3>
+              <p style={{color: 'var(--gold)'}}>${p.price}</p>
             </div>
-            <div style={{display: 'flex', gap: '10px'}}>
-              <button>Edit</button>
-              <button style={{background: 'red'}}>Delete</button>
-            </div>
+            <button 
+              onClick={() => deleteWatch(p.id)} // WIRE IT UP
+              style={{background: 'red', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
