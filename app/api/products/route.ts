@@ -22,3 +22,9 @@ export async function DELETE(request: Request) {
   watches = watches.filter(w => w.id !== id) // remove it
   return NextResponse.json({ success: true })
 }
+// EDIT product
+export async function PUT(request: Request) {
+  const updatedWatch = await request.json()
+  watches = watches.map(w => w.id === updatedWatch.id ? updatedWatch : w)
+  return NextResponse.json({ success: true, product: updatedWatch })
+}
