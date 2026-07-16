@@ -41,3 +41,32 @@ export default function Dashboard() {
     </main>
   )
 }
+const [editingId, setEditingId] = useState<number | null>(null)
+const [editForm, setEditForm] = useState<any>({})
+
+async function saveEdit() {
+  await fetch('/api/products', {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(editForm)
+  })
+  setProducts(products.map(p => p.id === editForm.id ? editForm : p))
+  setEditingId(null)
+}
+
+// inside products.map replace the div with this:
+{editingId === p.id ? (
+  <div>
+    <input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} />
+    <input value={editForm.price} onChange={e => setEditForm({...editForm, price: e.target.value})} />
+    <button onClick={saveEdit}>Save</button>
+  </div>
+) : (
+  <div>
+    <h3>{p.name}</h3>
+    <p style={{color: 'var(--gold)'}}>${p.price}</p>
+  </div>
+)}
+
+<button onClick={() => {setEditingId(p.id); setEditForm(p)}}>Edit</button>
+<button onClick={() => deleteWatch(p.id)} style={{background: 'red'}}>Delete</button>
