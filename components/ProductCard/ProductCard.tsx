@@ -1,13 +1,14 @@
 import Button from '../Button/Button'
+import styles from '../../styles/components/ProductCard.module.css'
 
 export default function ProductCard({ product, showAdmin = false, onDelete, onEdit }: any) {
   return (
-    <div style={{background: '#121212', borderRadius: '8px', overflow: 'hidden', border: '1px solid #222'}}>
-      <img src={product.image} alt={product.name} style={{width: '100%', height: '300px', objectFit: 'cover'}}/>
-      <div style={{padding: '20px'}}>
+    <div className={styles.card}>
+      <img src={product.image} alt={product.name} className={styles.image}/>
+      <div className={styles.content}>
         <h3>{product.name}</h3>
-        <p style={{color: 'var(--gold)', fontSize: '24px'}}>${product.price}</p>
-        <p style={{color: 'var(--gray)'}}>{product.desc}</p>
+        <p className={styles.price}>${product.price}</p>
+        <p style={{color: 'var(--text-gray)'}}>{product.desc}</p>
 
         {showAdmin? (
           <div style={{display: 'flex', gap: '10px', marginTop: '16px'}}>
