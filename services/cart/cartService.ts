@@ -1,42 +1,24 @@
-import type { Cart, CartItem, Product } from '../../types'
-
 const CART_KEY = 'dodge_cart'
 
-// For now we use localStorage. Later we connect to /api/cart
 export const cartService = {
-  getCart: (): Cart => {
+  getCart: () => {
+    if (typeof window === 'undefined') return []
     const cart = localStorage.getItem(CART_KEY)
-    const items: CartItem[] = cart ? JSON.parse(cart) : []
-    
-    const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
-    
-    return { items, total, itemCount }
+    return cart ? JSON.parse(cart) : []
   },
-
-  addToCart: (product: Product): Cart => {
+  addToCart: (product: any, quantity: number) => {
     const cart = cartService.getCart()
-    const existingItem = cart.items.find(item => item.product.id === product.id)
-
-    if (existingItem) {
-      existingItem.quantity += 1
+    const existing = cart.find((item: any) => item.id === product.id)
+    if (existing) {
+      existing.quantity += quantity
     } else {
-      cart.items.push({ product, quantity: 1 })
+      cart.push({ ...product, quantity })
     }
-    
-    localStorage.setItem(CART_KEY, JSON.stringify(cart.items))
-    return cartService.getCart()
+    localStorage.setItem(CART_KEY, JSON.stringify(cart))
   },
-
-  removeFromCart: (productId: number): Cart => {
-    const cart = cartService.getCart()
-    cart.items = cart.items.filter(item => item.product.id !== productId)
-    localStorage.setItem(CART_KEY, JSON.stringify(cart.items))
-    return cartService.getCart()
+  removeFromCart: (id: number) => {
+    const cart = cartService.getCart().filter((item: any) => item.id !== id)
+    localStorage.setItem(CART_KEY, JSON.stringify(cart))
   },
-
-  clearCart: (): Cart => {
-    localStorage.removeItem(CART_KEY)
-    return { items: [], total: 0, itemCount: 0 }
-  }
+  clearCart: () => localStorage.removeItem(CART_KEY)
 }
