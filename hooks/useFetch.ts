@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 
 export function useFetch<T>(fetchFn: () => Promise<T>) {
-  const [data, setData] = useState<T | null>(null)
+  const [data, setData] = useState<T | null>(null) // <-- T instead of any
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -10,7 +10,7 @@ export function useFetch<T>(fetchFn: () => Promise<T>) {
     async function fetchData() {
       try {
         setLoading(true)
-        const result = await fetchFn() // <-- call the service function
+        const result = await fetchFn()
         setData(result)
       } catch (err: any) {
         setError(err.message)
