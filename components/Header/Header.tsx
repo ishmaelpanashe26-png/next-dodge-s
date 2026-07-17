@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import styles from '../../styles/components/Header.module.css'
 
 export default function Header() {
   return (
-    <header style={{background: '#000', padding: '20px 40px', borderBottom: '1px solid #222', display: 'flex', justifyContent: 'space-between'}}>
-      <Link href="/" style={{fontSize: '24px', fontWeight: 'bold', color: 'var(--gold)'}}>DODGE</Link>
-      <nav style={{display: 'flex', gap: '30px'}}>
+    <header className={styles.header}>
+      <Link href="/" className={styles.logo}>DODGE</Link>
+      <nav className={styles.nav}>
+        <Link href="/">Home</Link>
         <Link href="/watches">Shop</Link>
         <Link href="/dashboard">Dashboard</Link>
         <Link href="/cart">Cart [0]</Link>
