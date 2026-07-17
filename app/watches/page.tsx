@@ -1,9 +1,10 @@
 'use client'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { useFetch } from '../../hooks/useFetch'
+import { productService } from '../../services/productService'
 
 export default function WatchesPage() {
-  const { data: watches, loading, error } = useFetch<any[]>('/api/products')
+  const { data: watches, loading, error } = useFetch(productService.getAll)
 
   if(loading) return <p style={{padding: '60px', textAlign: 'center'}}>Loading watches...</p>
   if(error) return <p style={{padding: '60px', color: 'red'}}>Error: {error}</p>
