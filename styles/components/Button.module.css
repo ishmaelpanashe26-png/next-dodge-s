@@ -1,0 +1,22 @@
+.btn {
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.primary {
+  background: var(--gold);
+  color: #000;
+}
+
+.danger {
+  background: var(--danger);
+  color: #fff;
+}
