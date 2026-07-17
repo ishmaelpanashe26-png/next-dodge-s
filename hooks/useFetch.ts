@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 
-export function useFetch<T>(url: string) {
+export function useFetch<T>(fetchFn: () => Promise<T>) {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -10,9 +10,7 @@ export function useFetch<T>(url: string) {
     async function fetchData() {
       try {
         setLoading(true)
-        const res = await fetch(url, { cache: 'no-store' })
-        if (!res.ok) throw new Error('Failed to fetch')
-        const result = await res.json()
+        const result = await fetchFn() // <-- call the service function
         setData(result)
       } catch (err: any) {
         setError(err.message)
@@ -21,7 +19,7 @@ export function useFetch<T>(url: string) {
       }
     }
     fetchData()
-  }, [url])
+  }, [fetchFn])
 
   return { data, loading, error }
 }
