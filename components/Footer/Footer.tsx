@@ -1,7 +1,9 @@
+import styles from '../../styles/components/Footer.module.css'
+
 export default function Footer() {
   return (
-    <footer style={{background: '#000', padding: '40px', borderTop: '1px solid #222', textAlign: 'center', marginTop: '80px'}}>
-      <p style={{color: 'var(--gray)'}}>© 2026 DODGE. Swiss Precision.</p>
+    <footer className={styles.footer}>
+      <p className={styles.text}>© 2026 DODGE. Swiss Precision. All Rights Reserved.</p>
     </footer>
   )
 }
