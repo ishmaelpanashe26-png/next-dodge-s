@@ -40,3 +40,10 @@ export default function ProductCard({ product, showAdmin = false, onDelete, onEd
     </div>
   )
 }
+import Link from 'next/link'
+...
+return (
+  <Link href={`/watches/${product.id}`} className={styles.card}>
+    ...
+  </Link>
+)
