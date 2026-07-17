@@ -3,17 +3,44 @@
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   align-items: center;
-  padding: 80px 5%;
+  padding: 100px 5%;
   min-height: 80vh;
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+  color: #fff;
 }
+
 .heroTitle {
   font-size: 4rem;
   line-height: 1.1;
+  margin-bottom: 24px;
 }
+
+.heroSub {
+  font-size: 1.25rem;
+  color: #aaa;
+  margin-bottom: 32px;
+  max-width: 500px;
+}
+
 .heroImage {
   width: 100%;
   border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* Mobile responsive */
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; }
+  .hero { 
+    grid-template-columns: 1fr; 
+    text-align: center;
+    padding: 60px 5%;
+  }
+  .heroTitle { font-size: 2.5rem; }
+  .heroSub { margin: 0 auto 32px; }
 }
