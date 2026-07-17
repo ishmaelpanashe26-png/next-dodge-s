@@ -1,34 +1,25 @@
-import type { Product } from '../../types'
+import { apiClient } from '../api'
 
-const BASE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'
+// Mock data fallback if backend not ready
+const mockProducts = [
+  { id: 1, name: 'DODGE Chrono', price: 599, image: 'https://images.unsplash.com/photo-1523170335258-03ed810e7d0d?q=80&w=1480', stock: 10 },
+  { id: 2, name: 'DODGE Classic', price: 399, image: 'https://images.unsplash.com/photo-1548169874-53e85fbf2a90?q=80&w=1480', stock: 15 },
+  { id: 3, name: 'DODGE Sport', price: 799, image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=1480', stock: 8 },
+]
 
 export const productService = {
-  getAll: async (): Promise<Product[]> => { // <-- now returns Product[]
-    const res = await fetch(`${BASE_URL}/api/products`, { cache: 'no-store' })
-    if (!res.ok) throw new Error('Failed to fetch products')
-    return res.json()
+  async getAllProducts() {
+    try {
+      return await apiClient.get('/products')
+    } catch {
+      return mockProducts // fallback
+    }
   },
-
-  getById: async (id: string): Promise<Product | undefined> => { // <-- Product or undefined
-    const res = await fetch(`${BASE_URL}/api/products`, { cache: 'no-store' })
-    if (!res.ok) throw new Error('Failed to fetch product')
-    const watches: Product[] = await res.json() // <-- typed here too
-    return watches.find((w) => w.id === Number(id))
-  },
-
-  create: async (product: Omit<Product, 'id'>): Promise<Product> => { // <-- new product without id
-    const res = await fetch(`${BASE_URL}/api/products`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(product)
-    })
-    if (!res.ok) throw new Error('Failed to create product')
-    return res.json()
-  },
-
-  delete: async (id: number): Promise<{ success: boolean }> => {
-    const res = await fetch(`${BASE_URL}/api/products?id=${id}`, { method: 'DELETE' })
-    if (!res.ok) throw new Error('Failed to delete product')
-    return res.json()
+  async getProductById(id: number) {
+    try {
+      return await apiClient.get(`/products/${id}`)
+    } catch {
+      return mockProducts.find(p => p.id === id)
+    }
   }
 }
