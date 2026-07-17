@@ -1,12 +1,5 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-
-export const metadata: Metadata = {
-  title: 'Next Dodge S | Luxury Watches',
-  description: 'Timeless luxury. Precision crafted timepieces.',
-}
+import Header from '../components/Header/Header'
+import Footer from '../components/Footer/Footer'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
