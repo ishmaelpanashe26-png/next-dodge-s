@@ -1,26 +1,31 @@
-import Card from '@/components/Card'
+import Button from '../components/Button/Button'
+import Link from 'next/link'
+import styles from '../styles/pages/Home.module.css'
 
-async function getWatches() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/products`, { 
-    cache: 'no-store' 
-  })
-  if (!res.ok) throw new Error('Failed to fetch watches')
-  return res.json()
-}
-
-export default async function Home() {
-  const watches = await getWatches()
-  
+export default function HomePage() {
   return (
-    <main style={{padding: '60px 40px', maxWidth: '1200px', margin: 'auto'}}>
-      <section style={{textAlign: 'center', marginBottom: '60px'}}>
-        <h1 style={{fontSize: '48px'}}>Timeless Luxury</h1>
-        <p style={{color: 'var(--gray)'}}>Precision crafted. Built to last generations.</p>
+    <div>
+      {/* HERO SECTION */}
+      <section className={styles.hero}>
+        <div>
+          <h1 className={styles.heroTitle}>Time, Redefined</h1>
+          <p className={styles.heroSub}>Discover the collection of luxury watches crafted for you.</p>
+          <Link href="/watches">
+            <Button>Shop Collection</Button>
+          </Link>
+        </div>
+        <img 
+          src="https://images.unsplash.com/photo-1523170335258-03ed810e7d0d?q=80&w=1480" 
+          alt="Luxury Watch" 
+          className={styles.heroImage}
+        />
       </section>
-      
-      <section style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '30px'}}>
-        {watches.map((w: any) => <Card key={w.id} {...w} />)}
+
+      {/* FEATURED PRODUCTS */}
+      <section>
+        <h2 style={{textAlign: 'center', marginBottom: '40px'}}>Featured Watches</h2>
+        {/* We will plug in real products here next */}
       </section>
-    </main>
+    </div>
   )
 }
