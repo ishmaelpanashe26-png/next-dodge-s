@@ -1,23 +1,22 @@
+import type { Product } from '../../types'
+
 const BASE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'
 
 export const productService = {
-  // GET all products
-  getAll: async () => {
+  getAll: async (): Promise<Product[]> => { // <-- now returns Product[]
     const res = await fetch(`${BASE_URL}/api/products`, { cache: 'no-store' })
     if (!res.ok) throw new Error('Failed to fetch products')
     return res.json()
   },
 
-  // GET single product by id
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<Product | undefined> => { // <-- Product or undefined
     const res = await fetch(`${BASE_URL}/api/products`, { cache: 'no-store' })
     if (!res.ok) throw new Error('Failed to fetch product')
-    const watches = await res.json()
-    return watches.find((w: any) => w.id === Number(id))
+    const watches: Product[] = await res.json() // <-- typed here too
+    return watches.find((w) => w.id === Number(id))
   },
 
-  // POST create product
-  create: async (product: any) => {
+  create: async (product: Omit<Product, 'id'>): Promise<Product> => { // <-- new product without id
     const res = await fetch(`${BASE_URL}/api/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,8 +26,7 @@ export const productService = {
     return res.json()
   },
 
-  // DELETE product
-  delete: async (id: number) => {
+  delete: async (id: number): Promise<{ success: boolean }> => {
     const res = await fetch(`${BASE_URL}/api/products?id=${id}`, { method: 'DELETE' })
     if (!res.ok) throw new Error('Failed to delete product')
     return res.json()
