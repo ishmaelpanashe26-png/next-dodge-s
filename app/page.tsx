@@ -1,32 +1,13 @@
 import Link from 'next/link'
-import Button from '../components/Button/Button'
-import { productService } from '../services/product/productService'
-import ProductCard from '../components/ProductCard/ProductCard'
-import styles from '../styles/pages/Home.module.css'
 
-export default function HomePage() {
-  const featured = productService.getAllProducts().slice(0, 3)
-
+export default function Home() {
   return (
-    <>
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <h1>Time, Redefined</h1>
-          <p>Discover luxury watches crafted for precision, style, and legacy.</p>
-          <Link href="/watches"><Button>Shop Collection</Button></Link>
-        </div>
-        <img src="https://images.unsplash.com/photo-1523170335258-03ed810e7d0d?q=80&w=1480" alt="Luxury Watch" />
-      </section>
-
-      <section className={styles.section}>
-        <h2>Featured Collection</h2>
-        <div className={styles.grid}>
-          {featured.map(p => <ProductCard key={p.id} product={p} />)}
-        </div>
-        <div className={styles.centerBtn}>
-          <Link href="/watches"><Button>View All Watches</Button></Link>
-        </div>
-      </section>
-    </>
+    <div className="prose">
+      <h1>Welcome to Decor Express</h1>
+      <p>This is a minimal scaffolded Next.js app (TypeScript + Tailwind) created for you on the decor-express-setup branch.</p>
+      <p>
+        Use the nav to visit <Link href="/about">About</Link>, <Link href="/products">Products</Link>, <Link href="/gallery">Gallery</Link>, and <Link href="/contact">Contact</Link>.
+      </p>
+    </div>
   )
 }
